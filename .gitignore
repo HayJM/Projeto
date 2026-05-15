@@ -1,0 +1,17 @@
+# Ignorar arquivos de arquivo compactado grandes
+# Ignora todos arquivos .tar.gz
+*.tar.gz
+
+# Ignorar outros formatos de arquivo compactado comuns
+*.zip
+*.tar
+*.tgz
+*.7z
+*.rar
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Pastas temporárias
+__MACOSX/
