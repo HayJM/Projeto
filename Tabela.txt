@@ -4,14 +4,14 @@ V2 - Top View
 W - White Background
 B - Black Background
 
-00 - Pomegranate
-01 - khaki
-02 - Cherry Tomatoes
-03 - Fig
-04 - Pitanga
-05 - Sicilian Lemon
-06 - Gala Apple
-07 - Pear
-08 - Tangerine
-09 - Strawberry
+00 - Cherry Tomatoes
+01 - Fig
+02 - Gala Apple
+03 - Pear
+04 - Persimmon
+05 - Pitanga
+06 - Pomegranate
+07 - Sicilian Lemon
+08 - Strawberry
+09 - Tangerine 
 
