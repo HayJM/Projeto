@@ -3,7 +3,6 @@
 *.tar.gz
 
 # Ignorar outros formatos de arquivo compactado comuns
-*.zip
 *.tar
 *.tgz
 *.7z
