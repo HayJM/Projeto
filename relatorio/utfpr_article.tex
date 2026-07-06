@@ -1,0 +1,111 @@
+%%%% utfpr-article.tex, 2024/10/05
+%%%% Copyright (C) 2016-2024 Luiz E. M. Lima (luizeduardomlima@gmail.com)
+%%
+%% This work may be distributed and/or modified under the conditions of the
+%% LaTeX Project Public License, either version 1.3 of this license or (at your
+%% option) any later version.
+%% The latest version of this license is in
+%%   https://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX version
+%% 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status `maintained'.
+%%
+%% The Current Maintainer of this work is Luiz E. M. Lima.
+%%
+%% This work consists of all files listed in readme.html.
+%%
+%% A brief description of this work is in readme.txt.
+
+%% Detecção e aviso sobre comandos obsoletos
+% \RequirePackage[l2tabu, orthodox]{nag}
+
+%% Classe de documento
+\documentclass[%% Opções (^ = padrão; > = para pacotes):
+a4paper,%% Tamanho de papel: a4paper, letterpaper (^), etc.
+12pt,%% Tamanho de fonte: 10pt (^), 11pt ou 12pt
+fleqn,%% Alinhamento de equações à esquerda (centralizado por padrão)
+%   draft,%% Aparência de documento (>): draft ou final (^)
+english,%% Idioma secundário (penúltimo) (>)
+brazilian,%% Idioma primário (último) (>)
+]{article}
+
+%% Pacotes utilizados
+\usepackage{bookmark}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{mathrsfs}
+\usepackage{adjustbox}
+\usepackage{graphicx}
+\usepackage[%% Opções (^ = padrão; ¹ = Leiaute A; ² = Leiaute B):
+  Layout    = B,%% Leiaute (margens): A (esquerda menor + recuo) ou B (iguais) (^)
+%   Font      = Times,%% Fonte principal: Arial (²), Calibri (¹), Times ou LaTeX(*)
+%   TextColor = 575757,%% Cor (Modelo HTML) texto (preto ^): cinzento
+%   EmphColor = 008080,%% Cor (Modelo HTML) ênfase (preto ^): verde azulado
+%   LinkColor = ,%% Cor (Modelo HTML) hyperlink (azul escuro ^): nenhum modelo (cor texto)
+%   Rule      = Both,%% Linha (cabeçalho e rodapé): None (²), Header, Footer ou Both (¹)
+%   AffilIcon = Off,%% Ícones de e-mail, Lattes, ORCID e Instituição: On (^) ou Off
+  DocLic    = None,%% Licença do documento: CC (Creative Commons) (^) ou None
+%   CCLic     = BY-NC-ND,%% Licença CC: BY (^), BY-SA, BY-ND, BY-NC, BY-NC-SA ou BY-NC-ND
+%   PageNum   = Off,%% Numeração de páginas: On (^) ou Off
+%   SectNum   = Off,%% Numeração de seções (\section): On (²) ou Off (¹)
+%   UnnumSect = Center,%% Alinhamento de seções (\section*): Center (¹) ou Left (²)
+%   Caption   = Left,%% Alinhamento de legendas: Center (^) ou Left
+%   Source    = Left,%% Alinhamento de fontes (autoria): Center (^) ou Left
+%   ABNTCit   = NSB,%% Citação ABNT: AAY (Nome, Ano) (^), NRB (1) ou NSB [1]
+%   DOIIcon   = On,%% Ícone de DOI em referências: On ou Off (^)
+%   URLIcon   = On,%% Ícone de URL em referências: On ou Off (^)
+%   Index     = On,%% Índice Remissivo (makeindex): On ou Off (^)
+]{utfpr_article}
+
+
+%%% Título: {Português}; {English}
+\Title{%
+  \ifbool{@LayoutA}{}{%
+  Projeto de Processamento Digital de Imagens
+  }%
+}{%
+  \ifbool{@LayoutA}{}{%
+  }%
+}
+
+%%% Autor(es) (de 1 a 8, Leiaute A; de 1 a 16, Leiaute B): {Número}; {Dados}
+% \Author{1}{%% Bolsista ou voluntário(a) principal (primeiro)
+%   Name        = {Fábio Bays de Araujo},%
+%   Email       = {fabiobays@alunos.utfpr.edu.br},%
+%   Affiliation = {\UTFPRName, Toledo, Paraná, Brasil},%
+% }
+\Author{1}{%% Bolsista ou voluntário(a) principal (primeiro)
+  Name        = {Haynner Joner Mattos},%
+  Email       = {haynnermattos@alunos.utfpr.edu.br},%
+  Affiliation = {\UTFPRName, Toledo, Paraná, Brasil},%
+}
+% \Author{3}{%% Bolsista ou voluntário(a) principal (primeiro)
+%   Name        = {Kenedy de Paula Kaefer},%
+%   Email       = {kenedykaefer@alunos.utfpr.edu.br},%
+%   Affiliation = {\UTFPRName, Toledo, Paraná, Brasil},%
+% }
+
+%%% Instituição (UTFPR se nenhum evento): {Dados}
+\InstitutionInfo{%
+  Campus     = {Toledo},%
+  Department = {Engenharia de Computação},%
+  DeptLogo   = {LogoCursoAlfa.png},%% Arquivo de imagem em ./Logos/
+}
+
+%% Legendas e fontes (autoria) de ilustrações e tabelas em negrito
+\BoldCaption%% Texto normal por padrão
+
+%% Processamento (makeindex) de entradas (itens) do Índice Remissivo
+% \makeindex%
+
+\newcommand{\blankline}{\vspace{1\baselineskip}}
+
+\begin{document}
+
+\tableofcontents
+
+\input{Projeto}
+
+
+\end{document}

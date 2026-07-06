@@ -1,0 +1,106 @@
+
+\section{Introdução}
+Este relatório apresenta a análise técnica de um dump binário (produzido por \texttt{xxd -b}) de um arquivo de imagem no formato BMP, conforme solicitado na atividade \texttt{LE-PDI-EC-002}. A análise foca na interpretação dos cabeçalhos e na extração de metadados diretamente da estrutura binária.
+
+\section{Respostas da Atividade}
+
+\subsection*{A) Quantos bytes ocupa o arquivo?}
+O arquivo ocupa \textbf{1736 bytes}.
+
+\textbf{Trecho do Dump (Offsets 0x02 a 0x05):}
+\begin{verbatim}
+00000000: 01000010 01001101 11001000 00000110 00000000 00000000
+\end{verbatim}
+
+\textbf{Cálculo:}
+A leitura é feita em \textit{Little Endian}:
+\begin{enumerate}
+    \item Bytes em binário: $11001000_2$ (C8$_{16}$), $00000110_2$ (06$_{16}$), $00000000_2$ (00$_{16}$), $00000000_2$ (00$_{16}$).
+    \item Valor Hexadecimal reordenado: \texttt{0x000006C8}.
+    \item Conversão Decimal: $(6 \times 16^2) + (12 \times 16^1) + (8 \times 16^0) = 1536 + 192 + 8 = 1736$.
+\end{enumerate}
+
+\subsection*{B) Dimensões da imagem (pixels)}
+A imagem possui \textbf{20 pixels de largura por 20 pixels de altura}.
+
+\textbf{Trecho do Dump (Largura - Offset 0x12):}
+\begin{verbatim}
+00000012: 00010100 00000000 00000000 00000000
+\end{verbatim}
+
+\textbf{Cálculo:}
+O valor binário \texttt{00010100} em decimal:
+$2^4 + 2^2 = 16 + 4 = 20$ pixels. O mesmo se aplica ao campo de altura no offset \texttt{0x16}.
+
+\subsection*{C) Deslocamento de início dos dados de bitmap}
+Os dados iniciam no \textbf{Offset 138 (0x8A)}.
+
+\textbf{Trecho do Dump (Offset 0x0A):}
+\begin{verbatim}
+00000006: 00000000 00000000 00000000 00000000 10001010 00000000
+\end{verbatim}
+
+\textbf{Cálculo:}
+O valor binário \texttt{10001010} convertido para decimal:
+$1 \times 2^7 + 1 \times 2^3 + 1 \times 2^1 = 128 + 8 + 2 = 138_{10}$ (ou $0x8A$ em hex).
+
+\subsection*{D) Tamanho dos cabeçalhos}
+\begin{itemize}
+    \item \textbf{BMP Header:} 14 bytes (padrão).
+    \item \textbf{DIB Header:} 124 bytes.
+\end{itemize}
+\textbf{Justificativa:} O offset \texttt{0x0E} indica o tamanho do DIB Header (\texttt{01111100}$_2 = 124_{10}$), caracterizando um \texttt{BITMAPV5HEADER}.
+
+\subsection*{E) Bits por pixel}
+Foram utilizados \textbf{32 bits por pixel (RGBA)}.
+\textbf{Justificativa:} No offset \texttt{0x1C}, o valor \texttt{00100000}$_2$ equivale a $32_{10}$.
+
+\subsection*{F) PPI da imagem}
+A imagem possui \textbf{72 PPI}.
+\textbf{Justificativa:} No offset \texttt{0x26}, o valor de resolução é 2835 pixels/metro. $2835 / 39,37 \approx 72$ PPI.
+
+\subsection*{G) Utilização de Padding}
+\textbf{Não foi utilizado padding.}
+
+\textbf{Cálculo de Verificação:}
+\begin{enumerate}
+    \item \text{Largura} $\times$ (\text{BPP} / 8) = $20 \times (32 / 8) = 80$ bytes por linha.
+    \item Verificação de alinhamento: $80 \pmod 4 = 0$.
+\end{enumerate}
+Como 80 é múltiplo de 4, a linha já está alinhada.
+
+\subsection*{H) Cor de Fundo e I) Cor Predominante}
+\begin{itemize}
+    \item \textbf{Cor de Fundo:} Azul (Notação BGR no dump: 230, 26, 15).
+    \item \textbf{Cor Predominante:} Preto (0, 0, 0).
+\end{itemize}
+
+\subsection*{J) Tabela de Frequência de Cores}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lcr}
+\toprule
+\textbf{Notação (R, G, B)} & \textbf{Nome Sugerido} & \textbf{Frequência (Pixels)} \\
+\midrule
+(15, 26, 230) & Azul & 226 \\
+(0, 0, 0) & Preto & 89 \\
+(240, 0, 0) & Vermelho & 51 \\
+(22, 247, 2) & Verde Limão & 13 \\
+(239, 67, 67) & Vermelho Claro & 8 \\
+(68, 158, 10) & Verde Oliva & 7 \\
+(254, 254, 254) & Branco & 4 \\
+(248, 0, 0) & Vermelho Escuro & 1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{K) Reconstrução e Interpretação}
+Através da análise da distribuição dos 89 pixels pretos e dos tons de vermelho presentes na tabela de frequências, conclui-se que a imagem representa o ícone gráfico de \textbf{duas cerejas}. Os pixels pretos definem os contornos e detalhes, enquanto as variações de vermelho preenchem o corpo da fruta sobre o fundo azul.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.3\textwidth]{saida_digital.png}
+    \caption{Imagem reconstruída a partir dos dados binários.}
+    \label{fig:saida_digital}
+\end{figure}

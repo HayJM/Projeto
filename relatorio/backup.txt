@@ -1,0 +1,65 @@
+\section{Introdução}
+Este relatório apresenta a análise técnica de um dump binário (produzido por \texttt{xxd -b}) de um arquivo de imagem no formato BMP, conforme solicitado na atividade \texttt{LE-PDI-EC-002}.
+
+\section{Respostas da Atividade}
+
+\subsection*{A) Quantos bytes ocupa o arquivo?}
+O arquivo ocupa \textbf{1736 bytes}.
+\textbf{Justificativa:} No cabeçalho BMP, o tamanho total do arquivo é armazenado nos bytes \texttt{0x02} a \texttt{0x05} em formato \textit{Little Endian}. O dump binário nestas posições (\texttt{11001000 00000110 00000000 00000000}) corresponde ao valor hexadecimal \texttt{0x06C8}, que convertido para decimal resulta em 1736.
+
+\subsection*{B) Dimensões da imagem (pixels)}
+A imagem possui \textbf{20 pixels de largura por 20 pixels de altura}.
+\textbf{Justificativa:} No cabeçalho DIB, a largura é definida no deslocamento \texttt{0x12} (\texttt{00010100}$_2 = 20_{10}$) e a altura no deslocamento \texttt{0x16} (\texttt{00010100}$_2 = 20_{10}$).
+
+\subsection*{C) Deslocamento de início dos dados de bitmap}
+Os dados iniciam no \textbf{Offset 138 (0x8A)}.
+\textbf{Justificativa:} O campo de \textit{pixel array offset} (bytes \texttt{0x0A} a \texttt{0x0D}) contém o valor \texttt{10001010} em binário, que equivale a \texttt{0x8A} em hexadecimal ou 138 em decimal.
+
+\subsection*{D) Tamanho dos cabeçalhos}
+\begin{itemize}
+    \item \textbf{BMP Header:} 14 bytes (padrão fixo para o formato).
+    \item \textbf{DIB Header:} 124 bytes.
+\end{itemize}
+\textbf{Justificativa:} O tamanho do DIB Header é indicado a partir do deslocamento \texttt{0x0E}. O valor binário \texttt{01111100} corresponde a \texttt{0x7C} em hex, ou 124 em decimal, indicando um \texttt{BITMAPV5HEADER}.
+
+\subsection*{E) Bits por pixel}
+Foram utilizados \textbf{32 bits por pixel (RGBA)}.
+\textbf{Justificativa:} Localizado no deslocamento \texttt{0x1C}, o valor \texttt{00100000} binário equivale a 32 em decimal.
+
+\subsection*{F) PPI da imagem}
+A imagem possui \textbf{72 PPI}.
+\textbf{Justificativa:} O campo de resolução horizontal no deslocamento \texttt{0x26} indica aproximadamente 2835 pixels por metro. Convertendo para polegadas ($2835 / 39.37$), obtemos aproximadamente 72 PPI.
+
+\subsection*{G) Utilização de Padding}
+\textbf{Não foi utilizado padding.}
+\textbf{Justificativa:} No formato BMP, cada linha deve ser múltipla de 4 bytes. Como cada pixel ocupa 32 bits (4 bytes) e a largura é de 20 pixels, cada linha ocupa $20 \times 4 = 80$ bytes. Como 80 é múltiplo de 4, não há necessidade de preenchimento.
+
+\subsection*{H) Cor de fundo e I) Cor predominante}
+\begin{itemize}
+    \item \textbf{Cor de Fundo:} Laranja/Vermelho Vibrante (15, 26, 230).
+    \item \textbf{Cor Predominante (Excluindo fundo):} Preto (0, 0, 0).
+\end{itemize}
+
+\subsection*{J) Tabela de Frequência de Cores}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lcr}
+\toprule
+\textbf{Notação (R, G, B)} & \textbf{Nome Sugerido} & \textbf{Frequência (Pixels)} \\
+\midrule
+(15, 26, 230) & Laranja/Vermelho & 226 \\
+(0, 0, 0) & Preto & 89 \\
+(240, 0, 0) & Azul Profundo & 51 \\
+(22, 247, 2) & Verde Limão & 13 \\
+(239, 67, 67) & Azul Claro & 8 \\
+(68, 158, 10) & Verde Oliva & 7 \\
+(254, 254, 254) & Branco & 4 \\
+(248, 0, 0) & Azul Escuro & 1 \\
+\bottomrule
+\end{tabular}
+\caption{Frequência de cores extraída via Python.}
+\end{table}
+
+\subsection*{K) Reconstrução e Interpretação}
+Com base na frequência de cores e na distribuição dos 89 pixels pretos sobre o fundo de 226 pixels coloridos em uma grade de 20x20, a imagem representa um caractere ou símbolo gráfico centralizado, possivelmente um logotipo simplificado ou uma letra.
