@@ -2,12 +2,9 @@
 \babel@toc {brazilian}{}\relax 
 \babel@toc {brazilian}{}\relax 
 \setlength {\parskip }{\z@ plus\p@ }\listfontsize 
-\contentsline {section}{\numberline {1}Identificação do Projeto e Repositórios}{1}{section.1}%
-\contentsline {section}{\numberline {2}Descrição da Base de Imagens Original (ft-DB)}{1}{section.2}%
-\contentsline {section}{\numberline {3}Data Augmentation e Normalização}{1}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Formalização Matemática}{2}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Normalização e Estatísticas}{2}{subsection.3.2}%
-\contentsline {section}{\numberline {4}Resultados Finais da Classificação}{3}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Abordagem Clássica (Extração de Características + SVM)}{3}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Abordagem Deep Learning (CNN)}{3}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Análise Comparativa via Curva ROC}{3}{subsection.4.3}%
+\contentsline {section}{\numberline {1}Introdução e Repositórios}{1}{section.1}%
+\contentsline {section}{\numberline {2}Formalização Matemática das Transformações}{1}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Transformação Logarítmica}{1}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Transformação Exponencial (Lei da Potência / Correção Gamma)}{1}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Filtro da Média usando Convolução}{2}{subsection.2.3}%
+\contentsline {section}{\numberline {3}Estrutura de Execução e Classes}{2}{section.3}%
