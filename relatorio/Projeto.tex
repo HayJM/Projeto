@@ -1,106 +1,96 @@
 
-\section{Introdução}
-Este relatório apresenta a análise técnica de um dump binário (produzido por \texttt{xxd -b}) de um arquivo de imagem no formato BMP, conforme solicitado na atividade \texttt{LE-PDI-EC-002}. A análise foca na interpretação dos cabeçalhos e na extração de metadados diretamente da estrutura binária.
 
-\section{Respostas da Atividade}
-
-\subsection*{A) Quantos bytes ocupa o arquivo?}
-O arquivo ocupa \textbf{1736 bytes}.
-
-\textbf{Trecho do Dump (Offsets 0x02 a 0x05):}
-\begin{verbatim}
-00000000: 01000010 01001101 11001000 00000110 00000000 00000000
-\end{verbatim}
-
-\textbf{Cálculo:}
-A leitura é feita em \textit{Little Endian}:
-\begin{enumerate}
-    \item Bytes em binário: $11001000_2$ (C8$_{16}$), $00000110_2$ (06$_{16}$), $00000000_2$ (00$_{16}$), $00000000_2$ (00$_{16}$).
-    \item Valor Hexadecimal reordenado: \texttt{0x000006C8}.
-    \item Conversão Decimal: $(6 \times 16^2) + (12 \times 16^1) + (8 \times 16^0) = 1536 + 192 + 8 = 1736$.
-\end{enumerate}
-
-\subsection*{B) Dimensões da imagem (pixels)}
-A imagem possui \textbf{20 pixels de largura por 20 pixels de altura}.
-
-\textbf{Trecho do Dump (Largura - Offset 0x12):}
-\begin{verbatim}
-00000012: 00010100 00000000 00000000 00000000
-\end{verbatim}
-
-\textbf{Cálculo:}
-O valor binário \texttt{00010100} em decimal:
-$2^4 + 2^2 = 16 + 4 = 20$ pixels. O mesmo se aplica ao campo de altura no offset \texttt{0x16}.
-
-\subsection*{C) Deslocamento de início dos dados de bitmap}
-Os dados iniciam no \textbf{Offset 138 (0x8A)}.
-
-\textbf{Trecho do Dump (Offset 0x0A):}
-\begin{verbatim}
-00000006: 00000000 00000000 00000000 00000000 10001010 00000000
-\end{verbatim}
-
-\textbf{Cálculo:}
-O valor binário \texttt{10001010} convertido para decimal:
-$1 \times 2^7 + 1 \times 2^3 + 1 \times 2^1 = 128 + 8 + 2 = 138_{10}$ (ou $0x8A$ em hex).
-
-\subsection*{D) Tamanho dos cabeçalhos}
+\section{Identificação do Projeto e Repositórios}
 \begin{itemize}
-    \item \textbf{BMP Header:} 14 bytes (padrão).
-    \item \textbf{DIB Header:} 124 bytes.
-\end{itemize}
-\textbf{Justificativa:} O offset \texttt{0x0E} indica o tamanho do DIB Header (\texttt{01111100}$_2 = 124_{10}$), caracterizando um \texttt{BITMAPV5HEADER}.
-
-\subsection*{E) Bits por pixel}
-Foram utilizados \textbf{32 bits por pixel (RGBA)}.
-\textbf{Justificativa:} No offset \texttt{0x1C}, o valor \texttt{00100000}$_2$ equivale a $32_{10}$.
-
-\subsection*{F) PPI da imagem}
-A imagem possui \textbf{72 PPI}.
-\textbf{Justificativa:} No offset \texttt{0x26}, o valor de resolução é 2835 pixels/metro. $2835 / 39,37 \approx 72$ PPI.
-
-\subsection*{G) Utilização de Padding}
-\textbf{Não foi utilizado padding.}
-
-\textbf{Cálculo de Verificação:}
-\begin{enumerate}
-    \item \text{Largura} $\times$ (\text{BPP} / 8) = $20 \times (32 / 8) = 80$ bytes por linha.
-    \item Verificação de alinhamento: $80 \pmod 4 = 0$.
-\end{enumerate}
-Como 80 é múltiplo de 4, a linha já está alinhada.
-
-\subsection*{H) Cor de Fundo e I) Cor Predominante}
-\begin{itemize}
-    \item \textbf{Cor de Fundo:} Azul (Notação BGR no dump: 230, 26, 15).
-    \item \textbf{Cor Predominante:} Preto (0, 0, 0).
+    \item \textbf{Repositório Oficial no GitHub (Base de Imagens):} \\
+    \url{https://github.com/HayJM/Projeto.git}
+    \item \textbf{Arquivo Compactado da Base Original (.tar.gz):} \\
+    \url{https://github.com/HayJM/Projeto/blob/main/Projeto.tar.gz}
+    \item \textbf{Endereços dos Jupyter Notebooks (Google Colab):}
+    \begin{itemize}
+        \item \textbf{Notebook 1 (Base e Anotação):} \url{[Cole o link do Colab 1 aqui]}
+        \item \textbf{Notebook 2 (Data Augmentation e Normalização):} \url{[Cole o link do Colab 2 aqui]}
+        \item \textbf{Notebook 3 (Segmentação e Classificação):} \url{[Cole o link do Colab 3 aqui]}
+    \end{itemize}
 \end{itemize}
 
-\subsection*{J) Tabela de Frequência de Cores}
+\section{Descrição da Base de Imagens Original (ft-DB)}
+A base de dados desenvolvida foca no tema \textit{Fruits} (ft-DB). As imagens foram coletadas via dispositivos móveis sob condições controladas de iluminação. Foram definidas 10 classes, ordenadas alfabeticamente para a codificação automática de $0$ a $n-1$, conforme a Tabela \ref{tab:classes}.
 
 \begin{table}[h!]
 \centering
-\begin{tabular}{lcr}
+\caption{Tabela de codificação e estrutura das classes da base ft-DB.}
+\label{tab:classes}
+\begin{tabular}{cllc}
 \toprule
-\textbf{Notação (R, G, B)} & \textbf{Nome Sugerido} & \textbf{Frequência (Pixels)} \\
-\midrule
-(15, 26, 230) & Azul & 226 \\
-(0, 0, 0) & Preto & 89 \\
-(240, 0, 0) & Vermelho & 51 \\
-(22, 247, 2) & Verde Limão & 13 \\
-(239, 67, 67) & Vermelho Claro & 8 \\
-(68, 158, 10) & Verde Oliva & 7 \\
-(254, 254, 254) & Branco & 4 \\
-(248, 0, 0) & Vermelho Escuro & 1 \\
-\bottomrule
+\textbf{Código} & \textbf{Nome da Classe (Inglês)} & \textbf{Descrição do Item} & \textbf{Instâncias Mínimas} \\ \midrule
+00 & 00\_Cherry\_Tomatoes & Tomate Cereja & 10 \\
+01 & 01\_Fig & Figo & 10 \\
+02 & 02\_Gala\_Apple & Maçã Gala & 10 \\
+03 & 03\_Pear & Pera & 10 \\
+04 & 04\_Persimmon & Caqui & 10 \\
+05 & 05\_Pitanga & Pitanga & 10 \\
+06 & 06\_Pomegranate & Romã & 10 \\
+07 & 07\_Sicilian\_Lemon & Limão Siciliano & 10 \\
+08 & 08\_Strawberry & Morango & 10 \\
+09 & 09\_Tangerine & Tangerina & 10 \\ \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection*{K) Reconstrução e Interpretação}
-Através da análise da distribuição dos 89 pixels pretos e dos tons de vermelho presentes na tabela de frequências, conclui-se que a imagem representa o ícone gráfico de \textbf{duas cerejas}. Os pixels pretos definem os contornos e detalhes, enquanto as variações de vermelho preenchem o corpo da fruta sobre o fundo azul.
+Para cada instância/item de fruta, capturaram-se imagens sob dois ângulos de visão distintos ($V1$ e $V2$) variando entre dois fundos controlados: Branco ($B$) e Preto ($W$), seguindo rigidamente o padrão de nomenclatura \texttt{[Código]-[Instância]-[Visão]-[Fundo].png}. Todas as imagens foram padronizadas espacialmente através de cortes homogêneos de dimensões fixas e exportadas no formato PNG.
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.3\textwidth]{saida_digital.png}
-    \caption{Imagem reconstruída a partir dos dados binários.}
-    \label{fig:saida_digital}
-\end{figure}
+\section{Data Augmentation e Normalização}
+
+\subsection{Formalização Matemática}
+Para expandir a variabilidade da base de dados original em exatamente 3 vezes, utilizou-se o desdobramento de cada imagem em 3 novas versões artificiais embasadas nos seguintes operadores:
+
+\begin{enumerate}
+    \item \textbf{Transformação Logarítmica:} Expansão de contraste em zonas de baixa intensidade (subexpostas):
+    \begin{equation}
+        s = c \cdot \log(1 + r), \quad \text{onde } c = \frac{255}{\log(1 + \max(f))}
+    \end{equation}
+    
+    \item \textbf{Transformação Exponencial (Correção Gamma):} Ajuste não-linear de brilho atuando sobre pixels normalizados no intervalo $[0, 1]$ com parâmetro adotado $\gamma = 0.5$:
+    \begin{equation}
+        s = c \cdot r^{\gamma}
+    \end{equation}
+    
+    \item \textbf{Filtro da Média Espacial via Convolução:} Operação linear de suavização com máscara discreta normalizada (Kernel $5 \times 5$):
+    \begin{equation}
+        g(x, y) = \frac{1}{25} \sum_{i=-2}^{2} \sum_{j=-2}^{2} f(x+i, y+j)
+    \end{equation}
+\end{enumerate}
+
+\subsection{Normalização e Estatísticas}
+A normalização deu-se pela equalização global de histogramas através do mapeamento da Função de Distribuição Acumulada (CDF):
+\begin{equation}
+    s_k = \frac{L - 1}{MN} \sum_{j=0}^{k} n_j
+\end{equation}
+
+Em sequência, gerou-se para cada classe o \textit{Protótipo Médio} ($\mathbf{P}_c$), o \textit{Histograma Médio} ($\bar{h}_c$) e a \textit{Variância do Histograma} ($\sigma^2_c$) expressos por:
+\begin{equation}
+    \mathbf{P}_c(x, y) = \frac{1}{N_c} \sum_{i=1}^{N_c} f_i(x, y); \quad \bar{h}_c(k) = \frac{1}{N_c} \sum_{i=1}^{N_c} h_i(k)
+\end{equation}
+\begin{equation}
+    \sigma^2_c(k) = \frac{1}{N_c} \sum_{i=1}^{N_c} \left( h_i(k) - \bar{h}_c(k) \right)^2
+\end{equation}
+
+\section{Resultados Finais da Classificação}
+
+\subsection{Abordagem Clássica (Extração de Características + SVM)}
+A partir da segmentação automática executada via limiarização adaptativa de Otsu no canal de Saturação ($S$) do espaço HSV, extraiu-se o vetor contendo atributos de Cor (Matiz/Hue Médio: $\mu_H$), Forma (Circularidade: $C = \frac{4\pi A}{P^2}$ e \textit{Aspect Ratio}: $AR = \frac{W}{H}$) e Textura via descritores GLCM (Contraste e Homogeneidade). 
+
+Submetidos à divisão homogênea de dados (80\% treino, 10\% validação e 10\% teste), o classificador clássico obteve uma \textbf{Acurácia Global de 82.50\%}, demonstrando excelente isolamento para a classe \texttt{00\_Cherry\_Tomatoes} (F1-Score: 1.00), porém exibindo degradação e confusões marginais em classes semelhantes como \texttt{02\_Gala\_Apple} e \texttt{06\_Pomegranate}.
+
+\subsection{Abordagem Deep Learning (CNN)}
+Uma Rede Neural Convolucional de arquitetura livre (3 camadas convolucionais alternadas com max-pooling, camada de dropout a 0.5 e uma densa final Softmax de 10 neurônios) foi treinada sobre o \textit{augmented\_dataset} original (sem bounding-box). A CNN atingiu \textbf{83.00\% de acurácia média de teste}, com picos de generalização de \textbf{90.31\% na 12ª época}, eliminando os antigos gargalos da extração manual de formas geométricas.
+
+\subsection{Análise Comparativa via Curva ROC}
+A validação estatística final e definitiva do projeto foi consolidada por meio do cálculo da Área Sob a Curva ROC (\textit{Macro-Average Area Under the Curve}), cujos resultados numéricos foram:
+\begin{itemize}
+    \item \textbf{Métrica AUC da CNN:} 0.9844
+    \item \textbf{Métrica AUC do Classificador Clássico:} 0.6373
+\end{itemize}
+
+Os valores obtidos provam que o espaço latente e os filtros convolucionais extraídos de forma autônoma pela arquitetura de Deep Learning garantem um limiar de separabilidade entre as 10 classes de frutas drasticamente superior ao modelo matemático tradicional.
+

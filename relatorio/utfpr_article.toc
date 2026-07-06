@@ -2,5 +2,12 @@
 \babel@toc {brazilian}{}\relax 
 \babel@toc {brazilian}{}\relax 
 \setlength {\parskip }{\z@ plus\p@ }\listfontsize 
-\contentsline {section}{\numberline {1}Introdução}{1}{section.1}%
-\contentsline {section}{\numberline {2}Respostas da Atividade}{1}{section.2}%
+\contentsline {section}{\numberline {1}Identificação do Projeto e Repositórios}{1}{section.1}%
+\contentsline {section}{\numberline {2}Descrição da Base de Imagens Original (ft-DB)}{1}{section.2}%
+\contentsline {section}{\numberline {3}Data Augmentation e Normalização}{1}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Formalização Matemática}{2}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Normalização e Estatísticas}{2}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Resultados Finais da Classificação}{3}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Abordagem Clássica (Extração de Características + SVM)}{3}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Abordagem Deep Learning (CNN)}{3}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Análise Comparativa via Curva ROC}{3}{subsection.4.3}%
