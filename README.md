@@ -58,4 +58,3 @@ O relatório do trabalho está em `relatorio/Projeto.tex`. Ele descreve a formal
 
 - A base está organizada por classe em diretórios separados.
 - O projeto foi pensado para ser reproduzido localmente ou em ambiente online, como o Google Colab.
-- Caso você queira, este README pode ser adaptado para formato mais acadêmico ou mais curto, conforme a entrega exigida.
